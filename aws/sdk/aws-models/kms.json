@@ -131,6 +131,15 @@
                 }
             }
         },
+        "com.amazonaws.kms#AttestationDocumentType": {
+            "type": "blob",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 262144
+                }
+            }
+        },
         "com.amazonaws.kms#BooleanType": {
             "type": "boolean"
         },
@@ -183,6 +192,15 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The Amazon Resource Name (<a href=\"https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN\">key ARN</a>) of the KMS key whose deletion is canceled.</p>"
                     }
+                }
+            }
+        },
+        "com.amazonaws.kms#CiphertextForRecipientType": {
+            "type": "blob",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 6144
                 }
             }
         },
@@ -1095,12 +1113,18 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Specifies the encryption algorithm that will be used to decrypt the ciphertext. Specify\n      the same algorithm that was used to encrypt the data. If you specify a different algorithm,\n      the <code>Decrypt</code> operation fails.</p>\n         <p>This parameter is required only when the ciphertext was encrypted under an asymmetric KMS\n      key. The default value, <code>SYMMETRIC_DEFAULT</code>, represents the only supported\n      algorithm that is valid for symmetric encryption KMS keys.</p>"
                     }
+                },
+                "Recipient": {
+                    "target": "com.amazonaws.kms#RecipientInfo"
                 }
             }
         },
         "com.amazonaws.kms#DecryptResponse": {
             "type": "structure",
             "members": {
+                "CiphertextForRecipient": {
+                    "target": "com.amazonaws.kms#CiphertextForRecipientType"
+                },
                 "KeyId": {
                     "target": "com.amazonaws.kms#KeyIdType",
                     "traits": {
@@ -2077,6 +2101,9 @@
                         "smithy.api#documentation": "<p>Specifies the length of the data key in bytes. For example, use the value 64 to generate a\n      512-bit data key (64 bytes is 512 bits). For 128-bit (16-byte) and 256-bit (32-byte) data\n      keys, use the <code>KeySpec</code> parameter.</p>\n         <p>You must specify either the <code>KeySpec</code> or the <code>NumberOfBytes</code>\n      parameter (but not both) in every <code>GenerateDataKey</code> request.</p>"
                     }
                 },
+                "Recipient": {
+                    "target": "com.amazonaws.kms#RecipientInfo"
+                },
                 "KeySpec": {
                     "target": "com.amazonaws.kms#DataKeySpec",
                     "traits": {
@@ -2099,6 +2126,9 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The encrypted copy of the data key. When you use the HTTP API or the Amazon Web Services CLI, the value is Base64-encoded. Otherwise, it is not Base64-encoded.</p>"
                     }
+                },
+                "CiphertextForRecipient": {
+                    "target": "com.amazonaws.kms#CiphertextForRecipientType"
                 },
                 "Plaintext": {
                     "target": "com.amazonaws.kms#PlaintextType",
@@ -2335,12 +2365,18 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Generates the random byte string in the CloudHSM cluster that is associated with the\n      specified <a href=\"https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html\">custom key store</a>. To find the ID of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p>"
                     }
+                },
+                "Recipient": {
+                    "target": "com.amazonaws.kms#RecipientInfo"
                 }
             }
         },
         "com.amazonaws.kms#GenerateRandomResponse": {
             "type": "structure",
             "members": {
+                "CiphertextForRecipient": {
+                    "target": "com.amazonaws.kms#CiphertextForRecipientType"
+                },
                 "Plaintext": {
                     "target": "com.amazonaws.kms#PlaintextType",
                     "traits": {
@@ -3206,6 +3242,17 @@
                 "smithy.api#documentation": "<p>The request was rejected because the state of the specified resource is not valid for this\n      request.</p>\n         <p>For more information about how key state affects the use of a KMS key, see <a href=\"https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html\">Key states of KMS keys</a> in the <i>\n               <i>Key Management Service Developer Guide</i>\n            </i>.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 409
+            }
+        },
+        "com.amazonaws.kms#KeyEncryptionAlgorithmType": {
+            "type": "string",
+            "traits": {
+                "smithy.api#enum": [
+                    {
+                        "value": "RSAES_OAEP_SHA_256",
+                        "name": "RSAES_OAEP_SHA_256"
+                    }
+                ]
             }
         },
         "com.amazonaws.kms#KeyIdType": {
@@ -4489,6 +4536,17 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The encryption algorithm that was used to reencrypt the data.</p>"
                     }
+                }
+            }
+        },
+        "com.amazonaws.kms#RecipientInfo": {
+            "type": "structure",
+            "members": {
+                "AttestationDocument": {
+                    "target": "com.amazonaws.kms#AttestationDocumentType"
+                },
+                "KeyEncryptionAlgorithm": {
+                    "target": "com.amazonaws.kms#KeyEncryptionAlgorithmType"
                 }
             }
         },
