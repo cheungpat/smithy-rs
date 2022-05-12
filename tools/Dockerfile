@@ -102,6 +102,7 @@ RUN set -eux; \
     cargo install --path tools/sdk-lints; \
     cargo install --path tools/sdk-sync; \
     cargo install --path tools/sdk-versioner; \
+    cargo install --path tools/smithy-rs-sync; \
     chmod g+rw -R /opt/cargo/registry
 
 #
